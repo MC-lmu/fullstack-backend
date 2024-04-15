@@ -26,3 +26,11 @@ Content-Type: application/json
 ### Get details of project
 GET http://127.0.0.1:3000/api/v1/projects/1
 Content-Type: application/json
+
+### Update a project
+PATCH http://127.0.0.1:3000/api/v1/projects/1
+Content-Type: application/json
+
+{
+    "title": "A Brand New Title"
+}

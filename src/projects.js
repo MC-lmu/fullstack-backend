@@ -55,4 +55,18 @@ router.get('/:id', async (req, res, next) => { //Get project details
   return res.json(projectDetails);
 });
 
+/* Update endpoint */
+router.patch('/:id', async (req, res, next) => {
+  const projectId = parseInt(req.params.id);
+  if (isNaN(projectId)) {
+    return next(httpErrors.BadRequest('Invalid parameter \':id\''));
+  }
+
+  if (!await DBService.updateProject(projectId, req.body)) {
+    return next(httpErrors.NotFound());
+  }
+
+  return res.send();
+});
+
 module.exports = router;

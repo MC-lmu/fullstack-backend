@@ -18,6 +18,13 @@ module.exports.getClient = () => client;
 /**
  * Utility functions for internal usage
  */
+function preprocessProjectKeywords(raw) {
+  if (!raw) {
+    return [];
+  }
+
+  return raw.map((kw) => String(kw).toLowerCase());
+}
 
 /**
  * Project management service
@@ -27,6 +34,8 @@ module.exports.projects = {
 
   listProjects,
   getProjectDetails,
+
+  updateProject,
 };
 
 async function createProject(
@@ -36,10 +45,7 @@ async function createProject(
   keywords,
   /* pictures */
 ) {
-  //Handle case where the project has no keywords
-  if (!keywords) {
-    keywords = [];
-  }
+  keywords = preprocessProjectKeywords(keywords);
 
   const insertResult = await client.query(
     'INSERT INTO projects ' +
@@ -89,4 +95,40 @@ async function getProjectDetails(projectId) {
   }
 
   return selectResult.rows[0];
+}
+
+async function updateProject(projectId, updatedFields) {
+  //Fetch existing project information
+  const curProjInfo = await getProjectDetails(projectId);
+  if (!curProjInfo) {
+    return null;
+  }
+
+  //Overwrite fields that need to be updated
+  const newProjInfo = { 'id': curProjInfo.id };
+  for (const key in curProjInfo) {
+    if (key === 'id')
+      continue;
+
+    newProjInfo[key] = updatedFields[key] ?? curProjInfo[key];
+  }
+
+  newProjInfo.keywords = preprocessProjectKeywords(
+    newProjInfo.keywords
+  );
+
+  //Commit updated state
+  const updateResult = await client.query(
+    'UPDATE projects SET ' +
+    'title=$2, short_description=$3, full_description=$4, ' +
+    'keywords=$5 WHERE id=$1',
+    [
+      projectId, newProjInfo.title,
+      newProjInfo.short_description,
+      newProjInfo.full_description,
+      newProjInfo.keywords
+    ]
+  );
+
+  return updateResult.rowCount;
 }
