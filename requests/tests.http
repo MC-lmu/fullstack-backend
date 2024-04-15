@@ -1,0 +1,5 @@
+### Test endpoint
+GET http://127.0.0.1:3000
+
+### Invalid endpoint
+GET http://127.0.0.1:3000/this_endpoint_does_not_exist
