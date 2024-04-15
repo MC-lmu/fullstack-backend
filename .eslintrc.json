@@ -1,5 +1,6 @@
 {
     "env": {
+        "browser": true,
         "es2021": true,
         "node": true
     },
@@ -8,13 +9,14 @@
         "ecmaVersion": "latest"
     },
     "rules": {
+        "no-unused-vars": "warn",
         "indent": [
             "error",
-            4
+            2
         ],
         "linebreak-style": [
             "error",
-            "windows"
+            "unix"
         ],
         "quotes": [
             "error",
@@ -24,8 +26,9 @@
             "error",
             "always"
         ],
-        "no-unused-vars": [
-            "error"
+        "no-multiple-empty-lines": [
+            "error",
+            { "max": 1 }
         ]
     }
 }
