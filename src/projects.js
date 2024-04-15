@@ -69,4 +69,18 @@ router.patch('/:id', async (req, res, next) => {
   return res.send();
 });
 
+/* Delete endpoint */
+router.delete('/:id', async (req, res, next) => {
+  const projectId = parseInt(req.params.id);
+  if (isNaN(projectId)) {
+    return next(httpErrors.BadRequest('Invalid parameter \':id\''));
+  }
+
+  if (!await DBService.deleteProject(projectId)) {
+    return next(httpErrors.NotFound());
+  }
+
+  return res.send();
+});
+
 module.exports = router;

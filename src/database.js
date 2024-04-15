@@ -36,6 +36,8 @@ module.exports.projects = {
   getProjectDetails,
 
   updateProject,
+
+  deleteProject
 };
 
 async function createProject(
@@ -131,4 +133,13 @@ async function updateProject(projectId, updatedFields) {
   );
 
   return updateResult.rowCount;
+}
+
+async function deleteProject(projectId) {
+  const deleteResult = await client.query(
+    'DELETE FROM projects WHERE id=$1',
+    [ projectId ]
+  );
+
+  return deleteResult.rowCount === 1;
 }
