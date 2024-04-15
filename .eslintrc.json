@@ -25,10 +25,7 @@
             "always"
         ],
         "no-unused-vars": [
-            "error",
-            {
-                "argsIgnorePattern": "next"
-            }
+            "error"
         ]
     }
 }

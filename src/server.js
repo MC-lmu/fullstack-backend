@@ -26,6 +26,7 @@ app.use((err, req, res, next) => {  //Handler for http-errors exceptions
     });
 });
 
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {  //Generic exception handler
     console.error('UNHANDLED EXCEPTION:');
     console.error(err.stack);
