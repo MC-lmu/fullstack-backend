@@ -7,10 +7,9 @@ const router = express.Router();
 const DBService = require('./database').projects;
 
 /* Creation endpoint */
-router.post('/create', async (req, res) => {
+router.post('/create', async (req, res, next) => {
   //TODO: check user is authenticated
   //TODO: get the pictures from user
-  //TODO: validate parameters
   const {
     title,
     short_description,
@@ -18,13 +17,21 @@ router.post('/create', async (req, res) => {
     keywords
   } = req.body;
 
+  if (!title) {
+    return next(httpErrors.BadRequest('Missing parameter \'title\''));
+  } else if (!short_description) {
+    return next(httpErrors.BadRequest('Missing paramter \'short_description\''));
+  } else if (!full_description) {
+    return next(httpErrors.BadRequest('Missing parameter \'full_description\''));
+  }
+
   const projectId = await DBService.createProject(
     title, short_description,
     full_description,
     keywords
   );
 
-  res.status(200).json({
+  res.json({
     'id': projectId
   });
 });
