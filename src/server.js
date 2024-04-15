@@ -8,6 +8,13 @@ const app = express();
 
 app.use(express.json());
 
+/* Create routes */
+const apiRouter = express.Router();
+apiRouter.use('/projects', require('./projects'));
+
+app.use('/api/v1', apiRouter);
+
+/* Test endpoint */
 app.get('/', (req, res) => {
   res.status(200).send('hello!\n');
 });

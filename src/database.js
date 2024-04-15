@@ -14,3 +14,40 @@ const client = new Client({
 });
 
 module.exports.getClient = () => client;
+
+/**
+ * Utility functions for internal usage
+ */
+
+/**
+ * Project management service
+ */
+module.exports.projects = {
+  createProject,
+};
+
+async function createProject(
+  title,
+  short_description,
+  full_description,
+  keywords,
+  /* pictures */
+) {
+  //Handle case where the project has no keywords
+  if (!keywords) {
+    keywords = [];
+  }
+
+  const insertResult = await client.query(
+    'INSERT INTO projects ' +
+    '(title, short_description, full_description, keywords) ' +
+    'VALUES ($1, $2, $3, $4) RETURNING id',
+    [ title, short_description, full_description, keywords ]
+  );
+
+  if (insertResult.rows.length !== 1) {
+    console.error('createProject: fail!');
+  }
+
+  return insertResult.rows[0].id;
+}

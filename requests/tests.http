@@ -3,3 +3,18 @@ GET http://127.0.0.1:3000
 
 ### Invalid endpoint
 GET http://127.0.0.1:3000/this_endpoint_does_not_exist
+
+### Create project
+POST http://127.0.0.1:3000/api/v1/projects/create
+Content-Type: application/json
+
+{
+    "title": "Projet test",
+    "short_description": "Une courte description...",
+    "full_description": "Un article bien plus long!\\nOn peut même mettre des sauts de ligne !\\nN'est-ce pas génial ?!\\n",
+    "keywords": [
+        "test",
+        "projet",
+        "cool"
+    ]
+}
