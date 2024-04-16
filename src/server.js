@@ -4,8 +4,10 @@ const PORT = process.env.PORT;
 
 const HTTPErrors = require('http-errors');
 const express = require('express');
+const cors = require('cors');
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 /* Create routes */
