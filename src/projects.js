@@ -12,23 +12,26 @@ router.post('/create', async (req, res, next) => {
   //TODO: get the pictures from user
   const {
     title,
-    short_description,
-    full_description,
-    keywords
+    intro,
+    description,
+    thumbnail_url,
+    keywords,
+    illustration_urls
   } = req.body;
 
   if (!title) {
     return next(httpErrors.BadRequest('Missing parameter \'title\''));
-  } else if (!short_description) {
-    return next(httpErrors.BadRequest('Missing paramter \'short_description\''));
-  } else if (!full_description) {
-    return next(httpErrors.BadRequest('Missing parameter \'full_description\''));
+  } else if (!intro) {
+    return next(httpErrors.BadRequest('Missing paramter \'intro\''));
+  } else if (!description) {
+    return next(httpErrors.BadRequest('Missing parameter \'description\''));
+  } else if (!thumbnail_url) {
+    return next(httpErrors.BadRequest('Missing parameter \'thumbnail_url\''));
   }
 
   const projectId = await DBService.createProject(
-    title, short_description,
-    full_description,
-    keywords
+    title, intro, description, keywords,
+    thumbnail_url, illustration_urls
   );
 
   res.json({
