@@ -42,18 +42,19 @@ module.exports.projects = {
 
 async function createProject(
   title,
-  short_description,
-  full_description,
+  intro,
+  description,
   keywords,
-  /* pictures */
+  thumbnail_url,
+  illustration_urls
 ) {
   keywords = preprocessProjectKeywords(keywords);
 
   const insertResult = await client.query(
     'INSERT INTO projects ' +
-    '(title, short_description, full_description, keywords) ' +
-    'VALUES ($1, $2, $3, $4) RETURNING id',
-    [ title, short_description, full_description, keywords ]
+    '(title, intro, description, keywords, thumbnail_url, illustration_urls) ' +
+    'VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+    [ title, intro, description, keywords, thumbnail_url, illustration_urls ]
   );
 
   if (insertResult.rows.length !== 1) {
@@ -65,7 +66,7 @@ async function createProject(
 
 async function listProjects() {
   const selectResult = await client.query(
-    'SELECT id, title, short_description, keywords ' +
+    'SELECT id, title, intro, keywords, thumbnail_url ' +
     'FROM projects ORDER BY id ASC'
   );
 
@@ -77,7 +78,8 @@ async function listProjects() {
     return {
       'id': row.id,
       'title': row.title,
-      'short_description': row.short_description,
+      'intro': row.intro,
+      'thumbnail_url': row.thumbnail_url,
       'keywords': row.keywords ?? []
     };
   });
@@ -122,13 +124,16 @@ async function updateProject(projectId, updatedFields) {
   //Commit updated state
   const updateResult = await client.query(
     'UPDATE projects SET ' +
-    'title=$2, short_description=$3, full_description=$4, ' +
-    'keywords=$5 WHERE id=$1',
+    'title=$2, intro=$3, description=$4, keywords=$5, ' +
+    'thumbnail_url=$6, illustration_urls=$7 WHERE id=$1',
     [
-      projectId, newProjInfo.title,
-      newProjInfo.short_description,
-      newProjInfo.full_description,
-      newProjInfo.keywords
+      projectId,
+      newProjInfo.title,
+      newProjInfo.intro,
+      newProjInfo.description,
+      newProjInfo.keywords,
+      newProjInfo.thumbnail_url,
+      newProjInfo.illustration_urls
     ]
   );
 
