@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "dev": "nodemon --env-file=.env.development.local src/server.js"
+    "dev": "nodemon --env-file=.env.development.local src/server.js",
+    "initdb": "node --env-file=.env.development.local initdb.js"
   },
   "keywords": [],
   "author": "",
