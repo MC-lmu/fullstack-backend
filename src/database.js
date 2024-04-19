@@ -16,17 +16,6 @@ const client = new Client({
 module.exports.getClient = () => client;
 
 /**
- * Utility functions for internal usage
- */
-function preprocessProjectKeywords(raw) {
-  if (!raw) {
-    return [];
-  }
-
-  return raw.map((kw) => String(kw).toLowerCase());
-}
-
-/**
  * Project management service
  */
 module.exports.projects = {
@@ -48,7 +37,8 @@ async function createProject(
   thumbnail_url,
   illustration_urls
 ) {
-  keywords = preprocessProjectKeywords(keywords);
+  if (!keywords) keywords = [];
+  if (!illustration_urls) illustration_urls = [];
 
   const insertResult = await client.query(
     'INSERT INTO projects ' +
@@ -116,10 +106,6 @@ async function updateProject(projectId, updatedFields) {
 
     newProjInfo[key] = updatedFields[key] ?? curProjInfo[key];
   }
-
-  newProjInfo.keywords = preprocessProjectKeywords(
-    newProjInfo.keywords
-  );
 
   //Commit updated state
   const updateResult = await client.query(
